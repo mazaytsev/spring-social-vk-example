@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="rnemykin" id="11.12.2018-0">
+        <createTable tableName="user_account">
+            <column name="id" remarks="ID" type="varchar(512)">
+                <constraints primaryKey="true" primaryKeyName="pk_user_account_id"/>
+            </column>
+            <column name="provider" remarks="Oauth провайдер (OAuthProviderEnum)" type="varchar(100)"/>
+            <column name="display_name" remarks="Отображаемое имя" type="varchar(1024)"/>
+            <column name="first_name" remarks="Имя" type="varchar(512)"/>
+            <column name="last_name" remarks="Фамилия" type="varchar(512)"/>
+            <column name="email" remarks="Email" type="varchar(1024)"/>
+            <column name="user_name" remarks="Имя пользователя" type="varchar(512)"/>
+            <column name="profile_url" remarks="Ссылка на профиль" type="clob"/>
+            <column name="image_url" remarks="Ссылка на аватар" type="clob"/>
+        </createTable>
+
+        <createTable tableName="users">
+            <column name="id" remarks="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_user_id"/>
+            </column>
+            <column name="first_name" remarks="Имя" type="varchar(100)"/>
+            <column name="last_name" remarks="Фамилия" type="varchar(100)"/>
+            <column name="account_id" remarks="Ссылка на аккаунт" type="varchar(512)">
+                <constraints nullable="true" references="user_account(id)" foreignKeyName="users_account_id_fk"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="rnemykin" id="14.12.2018-1">
+        <createTable tableName="userconnection">
+            <column name="userid" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="providerid" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provideruserid" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="displayname " type="varchar(255)"/>
+            <column name="rank" type="int"/>
+            <column name="profileurl" type="varchar(512)"/>
+            <column name="imageurl" type="varchar(512)"/>
+            <column name="accesstoken" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="secret" type="varchar(512)"/>
+            <column name="refreshtoken" type="varchar(512)"/>
+            <column name="expiretime" type="bigint"/>
+        </createTable>
+
+        <createIndex tableName="userconnection" indexName="userconnectionrank">
+            <column name="userid"/>
+            <column name="providerid"/>
+            <column name="rank"/>
+        </createIndex>
+
+        <addPrimaryKey tableName="userconnection" columnNames="userid, providerid, provideruserid"
+                       constraintName="userconnection_pk"/>
+    </changeSet>
+
+</databaseChangeLog>

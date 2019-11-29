@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div data-th-if="${#authorization.expression('isAuthenticated()')}">
+    <h1>[[${name.getFirstName()}]] [[${name.getLastName()}]]</h1>
+    <img th:src="@{${name.getImageUrl()}}" alt="Userpic">
+    <h2>email: [[${name.getEmail()}]]</h2>
+    <h3><a href="/signout">Logout</a></h3>
+</div>
+<div data-th-if="${#authorization.expression('isAnonymous()')}">
+    <h3><a href="/auth/vkontakte">Login</a></h3>
+</div>
+</body>
+</html>
